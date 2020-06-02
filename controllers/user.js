@@ -989,7 +989,8 @@ module.exports = {
 	insertar_servicioOfrecer,
 	insertar_procesoVenta, 
 	insertar_Archivo,
-	insertar_Agenda
+	insertar_Agenda,
+	insertar_tipo_respuesta
 	
 };
 
