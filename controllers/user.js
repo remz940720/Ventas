@@ -21,6 +21,7 @@ let Venta = require('../models/procesoventa');
 let ServicioOfrecer =require('../models/servicio_ofrecer');
 let archivo =require('../models/archivo');
 let agenda = require('../models/agenda');
+let tipoRespuesta =require('../models/tipo_respuesta');
 
 let fs = require('fs');
 let path = require('path');
@@ -106,6 +107,27 @@ function traer_tareas_empresa(req,res){
 
 
 }
+
+
+//funcion para agregar tipo_respuesta
+function insertar_tipo_respuesta(req,res){
+	let tipo_respuesta = new tipoRespuesta(
+		req.body.id_tipo_respuesta,
+		req.body.tipoRespuesta,
+		req.body.descripcion
+	);
+	console.log(tipo_respuesta);
+	CONN('vsc_tipo_respuesta').insert(tipo_respuesta).then(insertarespuesta =>{
+		if (!insertarespuesta){
+			res.status(500).send({ resp: 'error', error: `${error}` });
+		}else{
+			res.status(200).send({resp: 'se a registrado correctamente el la respuesta', insertarespuesta:insertarespuesta});
+		}
+		}).catch(error =>{
+		res.status(500).send({resp: 'error', error: `${error}` });
+	});
+}
+
 
 //funcion para agregar servicio a ofrecer
 function insertar_servicioOfrecer(req,res){
