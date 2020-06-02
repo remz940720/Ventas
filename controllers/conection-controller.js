@@ -7,7 +7,7 @@ module.exports=knex({
     host : 'localhost',
     user : 'root',
     password : '',
-    database : 'intranet_script',
+    database : 'intranet',
     port:'3306'
 }
 
