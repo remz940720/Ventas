@@ -1,9 +1,8 @@
 'use strict'
 
 class status{
-	constructor(status){
-		//this.id_sector = id_sector;
-		
+	constructor(id_status,status){
+		this.id_status = id_status;
 		this.status = status;
 	}
 }

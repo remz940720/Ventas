@@ -7,7 +7,7 @@ let Empresa = require('../models/empresa');
 let Giroempresa = require('../models/giro');
 let Grupoempresa = require('../models/grupo');
 let Sectorempresa = require('../models/sector');
-let Contactoempresa = require('../models/contacto');
+let ContactoPersona = require('../models/contactopersona');
 let Status = require('../models/status');
 let Agenda = require('../models/agenda');
 let Momentos = require('../models/momentos');
@@ -22,6 +22,9 @@ let ServicioOfrecer =require('../models/servicio_ofrecer');
 let archivo =require('../models/archivo');
 let agenda = require('../models/agenda');
 let tipoRespuesta =require('../models/tipo_respuesta');
+let medioContacto=require('../models/medio_contacto');
+let Origen = require('../models/origen');
+let seguimiento = require('../models/seguimientoempresa')
 
 let fs = require('fs');
 let path = require('path');
@@ -108,20 +111,100 @@ function traer_tareas_empresa(req,res){
 
 }
 
+//funcion para agregar seguimiento
+function insertar_seguimiento(req,res){
+	let Seguimiento = new seguimiento(
+		req.body.id_seguimiento_empresa,
+		req.body.id_agenda,
+		req.body.id_momento
+	);
+	console.log(Seguimiento);
+	CONN('vsc_seguimiento_empresa').insert(Seguimiento).then(insertaseguimiento =>{
+		if (!insertaseguimiento){
+			res.status(500).send({ resp: 'error', error: `${error}` });
+		}else{
+			res.status(200).send({resp: 'se a registrado correctamente el origen', insertaseguimiento:insertaseguimiento});
+		}
+		}).catch(error =>{
+		res.status(500).send({resp: 'error', error: `${error}` });
+	});
+}
+
+
+
+//funcion para agregar origen
+function insertar_origen(req,res){
+	let origen = new Origen(
+		req.body.id_origen,
+		req.body.origen,
+		req.body.id_persona
+	);
+	console.log(origen);
+	CONN('vsc_origen').insert(origen).then(insertaorigen =>{
+		if (!insertaorigen){
+			res.status(500).send({ resp: 'error', error: `${error}` });
+		}else{
+			res.status(200).send({resp: 'se a registrado correctamente el origen', insertaorigen:insertaorigen});
+		}
+		}).catch(error =>{
+		res.status(500).send({resp: 'error', error: `${error}` });
+	});
+}
+
+
+
+//funcion para agregar status empresa
+function insertar_status(req,res){
+	let status = new Status(
+		req.body.id_status,
+		req.body.status
+	);
+	console.log(status);
+	CONN('vsc_status').insert(status).then(insertastatus =>{
+		if (!insertastatus){
+			res.status(500).send({ resp: 'error', error: `${error}` });
+		}else{
+			res.status(200).send({resp: 'se a registrado correctamente el status', insertastatus:insertastatus});
+		}
+		}).catch(error =>{
+		res.status(500).send({resp: 'error', error: `${error}` });
+	});
+}
+
+
+
+//funcion para agregar medio de contacto
+function insertar_medio_contacto(req,res){
+	let medio_contacto = new medioContacto(
+		req.body.medio_contacto,
+		req.body.descripcion
+	);
+	console.log(medio_contacto);
+	CONN('vsc_medio_contacto').insert(medio_contacto).then(insertamedio =>{
+		if (!insertamedio){
+			res.status(500).send({ resp: 'error', error: `${error}` });
+		}else{
+			res.status(200).send({resp: 'se a registrado correctamente el medio de contacto', insertamedio:insertamedio});
+		}
+		}).catch(error =>{
+		res.status(500).send({resp: 'error', error: `${error}` });
+	});
+}
+
+
 
 //funcion para agregar tipo_respuesta
 function insertar_tipo_respuesta(req,res){
-	let tipo_respuesta = new tipoRespuesta(
-		req.body.id_tipo_respuesta,
-		req.body.tipoRespuesta,
+	let Tipo_respuesta = new tipoRespuesta(
+		req.body.tipo_respuesta,
 		req.body.descripcion
 	);
-	console.log(tipo_respuesta);
-	CONN('vsc_tipo_respuesta').insert(tipo_respuesta).then(insertarespuesta =>{
+	console.log(Tipo_respuesta);
+	CONN('vsc_tipo_respuesta').insert(Tipo_respuesta).then(insertarespuesta =>{
 		if (!insertarespuesta){
 			res.status(500).send({ resp: 'error', error: `${error}` });
 		}else{
-			res.status(200).send({resp: 'se a registrado correctamente el la respuesta', insertarespuesta:insertarespuesta});
+			res.status(200).send({resp: 'se a registrado correctamente la respuesta', insertarespuesta:insertarespuesta});
 		}
 		}).catch(error =>{
 		res.status(500).send({resp: 'error', error: `${error}` });
@@ -184,7 +267,7 @@ function insertar_Archivo(req,res){
 		if (!insertaarchivo){
 			res.status(500).send({ resp: 'error', error: `${error}` });
 		}else{
-			res.status(200).send({resp: 'se a registrado correctamente el servicio', insertaarchivo:insertaarchivo});
+			res.status(200).send({resp: 'se a registrado correctamente el archivo', insertaarchivo:insertaarchivo});
 		}
 		}).catch(error =>{
 		res.status(500).send({resp: 'error', error: `${error}` });
@@ -192,7 +275,7 @@ function insertar_Archivo(req,res){
 	
 }
 
-//funcion para agregar archivo
+//funcion para agregar agenda
 function insertar_Agenda(req,res){
 	
 	let Agenda = new agenda(
@@ -223,19 +306,23 @@ function insertar_momento(req,res){
 	let fechamoment = moment().format("YYYY-MM-DD");
 	let horamoment = moment().format("h:mm:ss a");
 	//let momentoid = req.params.id_momento;
-	let momentoss = new Momentos(
+	let momento = new Momentos(
 		req.body.id_contacto,
 		req.body.id_tipo_respuesta,
 		req.body.id_medio_contacto,
-		req.body.id_status_proceso,
-		req.body.id_empresa,
-		req.body.fecha = fechamoment,
-		req.body.hora_momento = horamoment,
+		req.body.id_proceso_venta,
+		req.body.id_persona_contacto,
+		req.body.id_archivo,
+		req.body.fecha_momento,
+		req.body.hora_momento,
 		req.body.descripcion,
-		req.body.proximo_momento
+		req.body.hora_proxima,
+		req.body.fecha_proxima,
+		req.body.id_persona_contacto
+
 		);
-	console.log(momentoss);
-	CONN('momentos').insert(momentoss).then(insertamoment =>{
+	console.log(momento);
+	CONN('vsc_momento').insert(momento).then(insertamoment =>{
 		if (!insertamoment){
 			res.status(500).send({ resp: 'error', error: `${error}` });
 		}else{
@@ -503,24 +590,13 @@ function traerempresas(req,res){
 
 //metodo para agregar al contacto de la empresa
 function contacto(req,res){
-	let contacto = new Contactoempresa(
-		req.body.id_origen,
-		req.body.nombre_contacto,
-		req.body.area,
-		req.body.extencion,
-		req.body.email,
-		req.body.celular,
-		req.body.director_general,
-		req.body.gerente_administrativo,
-		req.body.gerente_personal,
-		req.body.gerente_ventas,
-		req.body.cel2,
-		req.body.cel3,
-		req.body.correo2,
-		req.body.correo3
+	let contactoPersona = new ContactoPersona(
+		req.body.id_contactos_persona,
+		req.body.id_persona,
+		req.body.id_contacto
 		);
-	console.log(contacto);
-	CONN('contacto_empresa').insert(contacto).then(idcontacto =>{
+	console.log(contactoPersona);
+	CONN('vsc_contacto_persona').insert(contactoPersona).then(idcontacto =>{
 
 		if (!idcontacto){
 
@@ -537,11 +613,11 @@ function contacto(req,res){
 //metodo para agregar giro
 function giro(req,res){
 	let giro = new Giroempresa(
-	req.body.giro,
-	req.body.descripcion
+	req.body.id_giro,
+	req.body.giro
 	);
 
-CONN('giro').insert(giro).then(idgiro =>{
+CONN('vsc_giro').insert(giro).then(idgiro =>{
 	if(!idgiro){
 		res.status(500).send({ resp: 'error', error: `${error}` });
 	}else{
@@ -556,7 +632,7 @@ CONN('giro').insert(giro).then(idgiro =>{
 
 //funcion para consultar grupo
 function traer_grupo(req,res){
-	CONN('grupo').select().then(grupos =>{
+	CONN('vsc_grupo').select().then(grupos =>{
 		console.log(grupos);
 		if (!grupos){
 			res.status(500).send({ resp: 'error', error: `${error}` });
@@ -570,11 +646,11 @@ function traer_grupo(req,res){
 //funcion para agregar grupo
 function grupo(req,res){
 	let grupo = new Grupoempresa(
-	req.body.grupo,
-	req.body.descripcion,
+	req.body.id_grupo,
+	req.body.grupo
 	);
 
-CONN('grupo').insert(grupo).then(idgrupo =>{
+CONN('vsc_grupo').insert(grupo).then(idgrupo =>{
 	if(!idgrupo){
 		res.status(500).send({ resp: 'error', error: `${error}` });
 	}else{
@@ -602,11 +678,11 @@ function consul_sector(req,res){
 //funcion para agregar sector
 function sector(req,res){
 	let sector = new Sectorempresa(
+	req.body.id_sector,
 	req.body.sector,
-	req.body.descripcion,
 	);
 
-CONN('sector').insert(sector).then(idsector =>{
+CONN('vsc_sector').insert(sector).then(idsector =>{
 	if(!idsector){
 		res.status(500).send({ resp: 'error', error: `${error}` });
 	}else{
@@ -790,25 +866,19 @@ function registroempresa(req,res){
 	let fechamoment = moment().format("YYYY-MM-DD");
 	let horamoment = moment().format("h:mm:ss a");
 	let cliente = new Empresa(
+		req.body.id_empresas,
 		req.body.id_status,
+		req.body.puesto,
+		req.body.id_grupo,
+		req.body.id_sector,
 		req.body.id_giro,
 		req.body.nivel_compra,
-		req.body.id_sector,
-		req.body.id_grupo,
-		req.body.id_direccion,
-		req.body.id_contacto_empresa,
-		req.body.id_archivo = null,
-		req.body.nombre_empresa,
-		req.body.servicio,
 		req.body.num_empleados,
-		req.body.fecha_registro = fechamoment,
-		req.body.rfc,
-		req.body.logo,
-		req.body.horario_visita
+		req.body.id_persona,
 
 		);
 	
-	CONN('empresa').insert(cliente).then(idempresa =>{
+	CONN('vsc_empresa').insert(cliente).then(idempresa =>{
 		console.log(cliente);
 		if (!idempresa){
 			res.status(200).send({resp: 'error', error: `${error}` });
@@ -990,7 +1060,11 @@ module.exports = {
 	insertar_procesoVenta, 
 	insertar_Archivo,
 	insertar_Agenda,
-	insertar_tipo_respuesta
+	insertar_tipo_respuesta,
+	insertar_medio_contacto,
+	insertar_status,
+	insertar_origen,
+	insertar_seguimiento
 	
 };
 

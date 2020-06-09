@@ -1,24 +1,15 @@
 'use strict'
 class empresa{
-	constructor(id_status,id_giro,nivel_compra,id_sector,id_grupo,id_direccion,
-		id_contacto,id_archivo,nombre_empresa,servicio,num_empleados,fecha_registro,
-		rfc,logo,horario_visita){
-		
+	constructor(id_empresas,id_status,puesto,id_grupo,id_sector,id_giro,nivel_compra,num_empleados,id_persona){
+		this.id_empresas = id_empresas;
 		this.id_status = id_status;
+		this.puesto = puesto
+		this.id_grupo = id_grupo;
+		this.id_sector = id_sector;
 		this.id_giro = id_giro;
 		this.nivel_compra = nivel_compra;
-		this.id_sector = id_sector;
-		this.id_grupo = id_grupo;
-		this.id_direccion = id_direccion;
-		this.id_contacto = id_contacto;
-		this.id_archivo = id_archivo;
-		this.nombre_empresa = nombre_empresa;
-		this.servicio = servicio;
 		this.num_empleados = num_empleados;
-		this.fecha_registro = fecha_registro;
-		this.rfc = rfc;
-		this.logo = logo;
-		this.horario_visita = horario_visita;
+		this.id_persona= id_persona;
 	}
 
 }

@@ -38,12 +38,12 @@ api.post('/register',UserController.saveUser);
 api.get('/traerimagen/:imgfile',UserController.uploadimagen);
 api.post('/login',UserController.login);
 api.put('/actualizar/:id_usuario',md_auth.ensureAuth,UserController.actualizar);
-api.post('/direccion',UserController.direccion);
-api.post('/registroempresa',UserController.registroempresa);
-api.post('/giro',UserController.giro);
+api.post('/direccion',UserController.direccion); //ok
+api.post('/registroempresa',UserController.registroempresa); //ok
+api.post('/giro',UserController.giro); 
 api.post('/grupo',UserController.grupo);
 api.post('/sector',UserController.sector);
-api.post('/contacto',UserController.contacto);
+api.post('/contacto',UserController.contacto); //ok 
 api.get('/traerempresa',UserController.traerempresas);
 api.get('/traercolonia',UserController.traercolonia);
 api.get('/traeralcaldia',UserController.traeralcaldia);
@@ -56,10 +56,10 @@ api.put('/editempresa/:id_empresa',UserController.editarempresa);
 api.put('/editdireccion/:id_direccion',UserController.editardireccion);
 api.put('/editcontacto/:id_contacto',UserController.editarcontacto);
 api.get('/traer_momentos/:id_empresa',UserController.traermomentos);
-api.post('/metemomentos',UserController.insertar_momento);
+api.post('/metemomentos',UserController.insertar_momento); //ok
 api.get('/traerdireccion/:id_direccion',UserController.verdireccion);
-api.post('/insertarcolonia',UserController.consultarcolonia);
-api.post('/insertaralcaldia',UserController.consultaralcaldia);
+api.post('/insertarcolonia',UserController.consultarcolonia); //ok
+api.post('/insertaralcaldia',UserController.consultaralcaldia); //ok
 api.post('/insertarestado',UserController.consultarestado);
 api.post('/insertargrupo',UserController.consultargrupo);
 api.get('/traergrupo',UserController.traer_grupo);
@@ -78,8 +78,13 @@ api.put('/subeImagen/:id_empresa', uploadVideo.single('logo', 'id_empresa'), Use
 
 api.post('/insertaServicioOfrecer',UserController.insertar_servicioOfrecer);
 api.post('/insertaProcesoVenta',UserController.insertar_procesoVenta);
-api.post('/insertaArchivo',UserController.insertar_Archivo);
-api.post('/insertaAgenda',UserController.insertar_Agenda);
+api.post('/insertaArchivo',UserController.insertar_Archivo); //ok
+api.post('/insertaAgenda',UserController.insertar_Agenda); //ok
+api.post('/insertaTipoRespuesta',UserController.insertar_tipo_respuesta);
+api.post('/insertaMedioContacto',UserController.insertar_medio_contacto);
+api.post('/insertaStatus',UserController.insertar_status);
+api.post('/insertaOrigen',UserController.insertar_origen);
+api.post('/insertaSeguimiento',UserController.insertar_seguimiento);
 
 
 module.exports = api;
