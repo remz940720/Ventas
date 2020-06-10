@@ -1,7 +1,6 @@
 'use strict'
 class empresa{
-	constructor(id_empresas,id_status,puesto,id_grupo,id_sector,id_giro,nivel_compra,num_empleados,id_persona){
-		this.id_empresas = id_empresas;
+	constructor(id_status,puesto,id_grupo,id_sector,id_giro,nivel_compra,num_empleados,id_persona){
 		this.id_status = id_status;
 		this.puesto = puesto
 		this.id_grupo = id_grupo;

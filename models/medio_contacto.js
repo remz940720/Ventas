@@ -1,8 +1,7 @@
 'use strict'
 class medioContacto{
-	constructor(medio_contacto,descripcion){
+	constructor(medio_contacto){
         this.medio_contacto = medio_contacto;
-        this.descripcion= descripcion;
 	}
 }
 module.exports = medioContacto;

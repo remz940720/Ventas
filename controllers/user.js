@@ -135,7 +135,6 @@ function insertar_seguimiento(req,res){
 //funcion para agregar origen
 function insertar_origen(req,res){
 	let origen = new Origen(
-		req.body.id_origen,
 		req.body.origen,
 		req.body.id_persona
 	);
@@ -176,8 +175,7 @@ function insertar_status(req,res){
 //funcion para agregar medio de contacto
 function insertar_medio_contacto(req,res){
 	let medio_contacto = new medioContacto(
-		req.body.medio_contacto,
-		req.body.descripcion
+		req.body.medio_contacto
 	);
 	console.log(medio_contacto);
 	CONN('vsc_medio_contacto').insert(medio_contacto).then(insertamedio =>{
@@ -591,9 +589,7 @@ function traerempresas(req,res){
 //metodo para agregar al contacto de la empresa
 function contacto(req,res){
 	let contactoPersona = new ContactoPersona(
-		req.body.id_contactos_persona,
-		req.body.id_persona,
-		req.body.id_contacto
+		req.body.id_persona
 		);
 	console.log(contactoPersona);
 	CONN('vsc_contacto_persona').insert(contactoPersona).then(idcontacto =>{
@@ -613,7 +609,6 @@ function contacto(req,res){
 //metodo para agregar giro
 function giro(req,res){
 	let giro = new Giroempresa(
-	req.body.id_giro,
 	req.body.giro
 	);
 
@@ -646,11 +641,11 @@ function traer_grupo(req,res){
 //funcion para agregar grupo
 function grupo(req,res){
 	let grupo = new Grupoempresa(
-	req.body.id_grupo,
 	req.body.grupo
 	);
 
 CONN('vsc_grupo').insert(grupo).then(idgrupo =>{
+	console.log(grupo);
 	if(!idgrupo){
 		res.status(500).send({ resp: 'error', error: `${error}` });
 	}else{
@@ -866,7 +861,6 @@ function registroempresa(req,res){
 	let fechamoment = moment().format("YYYY-MM-DD");
 	let horamoment = moment().format("h:mm:ss a");
 	let cliente = new Empresa(
-		req.body.id_empresas,
 		req.body.id_status,
 		req.body.puesto,
 		req.body.id_grupo,
