@@ -1,8 +1,7 @@
 'use strict'
 
 class servicioOfrecer{
-	constructor(id_servicio_ofrecer,servicio){
-        this.id_servicio_ofrecer=id_servicio_ofrecer;
+	constructor(servicio){
         this.servicio=servicio;
 	}
 }

@@ -1,7 +1,7 @@
 'use strict'
 const CONN = require('./conection-controller');
 var bcrypt = require('bcrypt');
-let User = require('../models/user');
+let User = require('../models/usuario');
 let Address = require('../models/address');
 let Empresa = require('../models/empresa');
 let Giroempresa = require('../models/giro');
@@ -24,7 +24,8 @@ let agenda = require('../models/agenda');
 let tipoRespuesta =require('../models/tipo_respuesta');
 let medioContacto=require('../models/medio_contacto');
 let Origen = require('../models/origen');
-let seguimiento = require('../models/seguimientoempresa')
+let seguimiento = require('../models/seguimientoempresa');
+let Role =require('../models/role');
 
 let fs = require('fs');
 let path = require('path');
@@ -111,10 +112,30 @@ function traer_tareas_empresa(req,res){
 
 }
 
+
+
+//funcion para agregar role
+function insertar_role(req,res){
+	let role = new Role(
+		req.body.descripcion
+	);
+	console.log(role);
+	CONN('role').insert(role).then(insertarole =>{
+		if (!insertarole){
+			res.status(500).send({ resp: 'error', error: `${error}` });
+		}else{
+			res.status(200).send({resp: 'se a registrado correctamente el role', insertarole:insertarole});
+		}
+		}).catch(error =>{
+		res.status(500).send({resp: 'error', error: `${error}` });
+	});
+}
+
+
+
 //funcion para agregar seguimiento
 function insertar_seguimiento(req,res){
 	let Seguimiento = new seguimiento(
-		req.body.id_seguimiento_empresa,
 		req.body.id_agenda,
 		req.body.id_momento
 	);
@@ -123,7 +144,7 @@ function insertar_seguimiento(req,res){
 		if (!insertaseguimiento){
 			res.status(500).send({ resp: 'error', error: `${error}` });
 		}else{
-			res.status(200).send({resp: 'se a registrado correctamente el origen', insertaseguimiento:insertaseguimiento});
+			res.status(200).send({resp: 'se a registrado correctamente el registro seguimiento empresa', insertaseguimiento:insertaseguimiento});
 		}
 		}).catch(error =>{
 		res.status(500).send({resp: 'error', error: `${error}` });
@@ -155,7 +176,6 @@ function insertar_origen(req,res){
 //funcion para agregar status empresa
 function insertar_status(req,res){
 	let status = new Status(
-		req.body.id_status,
 		req.body.status
 	);
 	console.log(status);
@@ -194,8 +214,7 @@ function insertar_medio_contacto(req,res){
 //funcion para agregar tipo_respuesta
 function insertar_tipo_respuesta(req,res){
 	let Tipo_respuesta = new tipoRespuesta(
-		req.body.tipo_respuesta,
-		req.body.descripcion
+		req.body.tipo_respuesta
 	);
 	console.log(Tipo_respuesta);
 	CONN('vsc_tipo_respuesta').insert(Tipo_respuesta).then(insertarespuesta =>{
@@ -214,8 +233,7 @@ function insertar_tipo_respuesta(req,res){
 function insertar_servicioOfrecer(req,res){
 	
 	let servicioOfrecer = new ServicioOfrecer(
-		req.body.id_servicio_ofrecer,
-		req.body.servicio,
+		req.body.servicio
 		);
 	console.log(servicioOfrecer);
 	CONN('vsc_servicio_ofrecer').insert(servicioOfrecer).then(insertaservicio =>{
@@ -234,16 +252,15 @@ function insertar_servicioOfrecer(req,res){
 function insertar_procesoVenta(req,res){
 	
 	let procesoVenta = new Venta(
-		req.body.id_proceso_venta,
 		req.body.id_servicio_ofrecer,
 		req.body.id_momento
 		);
-	console.log(Venta);
-	CONN('vsc_proceso_venta').insert(Venta).then(insertaventa =>{
+	console.log(procesoVenta);
+	CONN('vsc_proceso_venta').insert(procesoVenta).then(insertaventa =>{
 		if (!insertaventa){
 			res.status(500).send({ resp: 'error', error: `${error}` });
 		}else{
-			res.status(200).send({resp: 'se a registrado correctamente el servicio', insertaventa:insertaventa});
+			res.status(200).send({resp: 'se a registrado correctamente el registro Proceso Venta', insertaventa:insertaventa});
 		}
 		}).catch(error =>{
 		res.status(500).send({resp: 'error', error: `${error}` });
@@ -308,7 +325,6 @@ function insertar_momento(req,res){
 		req.body.id_contacto,
 		req.body.id_tipo_respuesta,
 		req.body.id_medio_contacto,
-		req.body.id_proceso_venta,
 		req.body.id_persona_contacto,
 		req.body.id_archivo,
 		req.body.fecha_momento,
@@ -673,8 +689,7 @@ function consul_sector(req,res){
 //funcion para agregar sector
 function sector(req,res){
 	let sector = new Sectorempresa(
-	req.body.id_sector,
-	req.body.sector,
+	req.body.sector
 	);
 
 CONN('vsc_sector').insert(sector).then(idsector =>{
@@ -888,13 +903,14 @@ function registroempresa(req,res){
 
 function saveUser(req, res){ 
 	let usuario = new User(
-		req.body.id_usuario,
+		req.body.id_role,
 		req.body.nombre,
 		req.body.apellidopaterno,
 		req.body.apellidomaterno,
 		req.body.telefono,
 		req.body.email,
-		req.body.password
+		req.body.password,
+		req.body.imagen
 		);
 
 console.log(usuario);
@@ -1058,7 +1074,8 @@ module.exports = {
 	insertar_medio_contacto,
 	insertar_status,
 	insertar_origen,
-	insertar_seguimiento
+	insertar_seguimiento,
+	insertar_role
 	
 };
 

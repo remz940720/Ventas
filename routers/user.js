@@ -33,16 +33,15 @@ let uploadVideo = multer({ storage: storageImage,
 						});
 
 api.get('/probando-controlador',md_auth.ensureAuth,UserController.pruebas);
-api.post('/register',UserController.saveUser);
-
+api.post('/register',UserController.saveUser); //ok
 api.get('/traerimagen/:imgfile',UserController.uploadimagen);
 api.post('/login',UserController.login);
 api.put('/actualizar/:id_usuario',md_auth.ensureAuth,UserController.actualizar);
 api.post('/direccion',UserController.direccion); //ok
 api.post('/registroempresa',UserController.registroempresa); //ok
-api.post('/giro',UserController.giro); 
-api.post('/grupo',UserController.grupo);
-api.post('/sector',UserController.sector);
+api.post('/giro',UserController.giro);  //ok
+api.post('/grupo',UserController.grupo); //ok
+api.post('/sector',UserController.sector);  //ok
 api.post('/contacto',UserController.contacto); //ok 
 api.get('/traerempresa',UserController.traerempresas);
 api.get('/traercolonia',UserController.traercolonia);
@@ -60,7 +59,7 @@ api.post('/metemomentos',UserController.insertar_momento); //ok
 api.get('/traerdireccion/:id_direccion',UserController.verdireccion);
 api.post('/insertarcolonia',UserController.consultarcolonia); //ok
 api.post('/insertaralcaldia',UserController.consultaralcaldia); //ok
-api.post('/insertarestado',UserController.consultarestado);
+api.post('/insertarestado',UserController.consultarestado); //ok
 api.post('/insertargrupo',UserController.consultargrupo);
 api.get('/traergrupo',UserController.traer_grupo);
 api.get('/traer_sector',UserController.consul_sector);
@@ -76,15 +75,15 @@ api.put('/subeImagen/:id_empresa', uploadVideo.single('logo', 'id_empresa'), Use
 
 //Nuevas funciones creadas
 
-api.post('/insertaServicioOfrecer',UserController.insertar_servicioOfrecer);
-api.post('/insertaProcesoVenta',UserController.insertar_procesoVenta);
+api.post('/insertaServicioOfrecer',UserController.insertar_servicioOfrecer); //ok
+api.post('/insertaProcesoVenta',UserController.insertar_procesoVenta); //ok
 api.post('/insertaArchivo',UserController.insertar_Archivo); //ok
 api.post('/insertaAgenda',UserController.insertar_Agenda); //ok
-api.post('/insertaTipoRespuesta',UserController.insertar_tipo_respuesta);
-api.post('/insertaMedioContacto',UserController.insertar_medio_contacto);
-api.post('/insertaStatus',UserController.insertar_status);
-api.post('/insertaOrigen',UserController.insertar_origen);
-api.post('/insertaSeguimiento',UserController.insertar_seguimiento);
-
+api.post('/insertaTipoRespuesta',UserController.insertar_tipo_respuesta); //ok
+api.post('/insertaMedioContacto',UserController.insertar_medio_contacto); //ok
+api.post('/insertaStatus',UserController.insertar_status); //ok
+api.post('/insertaOrigen',UserController.insertar_origen); //ok
+api.post('/insertaSeguimiento',UserController.insertar_seguimiento); //ok
+api.post('/insertaRole',UserController.insertar_role); //ok
 
 module.exports = api;

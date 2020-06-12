@@ -1,8 +1,7 @@
 'use strict'
 
 class sector{
-	constructor(id_sector,sector){
-		this.id_sector = id_sector;
+	constructor(sector){
 		this.sector = sector;
 	}
 }
