@@ -35,7 +35,7 @@ let uploadVideo = multer({ storage: storageImage,
 api.get('/probando-controlador',md_auth.ensureAuth,UserController.pruebas);
 api.post('/register',UserController.saveUser); //ok
 api.get('/traerimagen/:imgfile',UserController.uploadimagen);
-api.post('/login',UserController.login);
+api.post('/login',UserController.login); //P
 api.put('/actualizar/:id_usuario',md_auth.ensureAuth,UserController.actualizar);
 api.post('/direccion',UserController.direccion); //ok
 api.post('/registroempresa',UserController.registroempresa); //ok
