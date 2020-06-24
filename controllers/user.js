@@ -515,7 +515,7 @@ function subeImg(req,res){
 	let idempresa = req.params.id_empresa;
 	let foto = req.file.filename;
 	
-	CONN('empresa').where('id_empresa',idempresa).
+	CONN('vsc_empresa').where('id_empresa',idempresa).
 	update('logo',foto)
 	.then(result=>{
 		if (!result) {
@@ -578,17 +578,29 @@ function traercontacto_empresa(req,res){
 //funcion para CONSULTAR los datos de todas las empresas
 function traerempresas(req,res){
 
-	CONN('empresa')
+	CONN('vsc_empresa')
+	/*
 	.join('contacto_empresa','empresa.id_contacto','=','contacto_empresa.id_contacto')
 	.join('status','empresa.id_status','=','status.id_status')
 	.join('direccion_empresa','empresa.id_direccion','=','direccion_empresa.id_direccion')
 	.join('colonia','direccion_empresa.id_colonia', '=','colonia.id_colonia')
 	.join('alcaldia','direccion_empresa.id_alcaldia', '=','alcaldia.id_alcaldia')
 	.join('estado','direccion_empresa.id_estado', '=','estado.id_estado')
+	*/
 
+	.join('vsc_status','vsc_empresa.id_status','=','vsc_status.id_status')
+	.join('cih_persona','cih_persona.id_persona','=','vsc_empresa.id_persona')
+	.join('cih_direccion_persona','cih_direccion_persona.id_persona','=','cih_persona.id_persona')
 	
 
-	.select().orderBy('empresa.id_empresa')
+	//cih_persona 
+	//vsc_status
+	//cih_direccion_persona
+	//vsc_colonia
+	//vsc_alcaldia
+	//vsc_estado
+
+	.select().orderBy('vsc_empresa.id_empresas')
 	.then(todas =>{
 			console.log(todas);
 		if (!todas){

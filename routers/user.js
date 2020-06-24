@@ -35,7 +35,7 @@ let uploadVideo = multer({ storage: storageImage,
 api.get('/probando-controlador',md_auth.ensureAuth,UserController.pruebas);
 api.post('/register',UserController.saveUser); //ok
 api.get('/traerimagen/:imgfile',UserController.uploadimagen);
-api.post('/login',UserController.login); //P
+api.post('/login',UserController.login); //ok
 api.put('/actualizar/:id_usuario',md_auth.ensureAuth,UserController.actualizar);
 api.post('/direccion',UserController.direccion); //ok
 api.post('/registroempresa',UserController.registroempresa); //ok
@@ -43,7 +43,7 @@ api.post('/giro',UserController.giro);  //ok
 api.post('/grupo',UserController.grupo); //ok
 api.post('/sector',UserController.sector);  //ok
 api.post('/contacto',UserController.contacto); //ok 
-api.get('/traerempresa',UserController.traerempresas);
+api.get('/traerempresa',UserController.traerempresas);//23
 api.get('/traercolonia',UserController.traercolonia);
 api.get('/traeralcaldia',UserController.traeralcaldia);
 api.get('/traerestado',UserController.traerestado);
