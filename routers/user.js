@@ -34,7 +34,7 @@ let uploadVideo = multer({ storage: storageImage,
 
 api.get('/probando-controlador',md_auth.ensureAuth,UserController.pruebas);
 api.post('/register',UserController.saveUser); //ok
-api.get('/traerimagen/:imgfile',UserController.uploadimagen);
+api.get('/traerimagen/:imgfile',UserController.uploadimagen);//ok
 api.post('/login',UserController.login); //ok
 api.put('/actualizar/:id_usuario',md_auth.ensureAuth,UserController.actualizar);
 api.post('/direccion',UserController.direccion); //ok
@@ -43,35 +43,35 @@ api.post('/giro',UserController.giro);  //ok
 api.post('/grupo',UserController.grupo); //ok
 api.post('/sector',UserController.sector);  //ok
 api.post('/contacto',UserController.contacto); //ok 
-api.get('/traerempresa',UserController.traerempresas);//23
-api.get('/traercolonia',UserController.traercolonia);
-api.get('/traeralcaldia',UserController.traeralcaldia);
-api.get('/traerestado',UserController.traerestado);
-api.get('/traercontacto',UserController.traercontacto_empresa);
-api.get('/traerstatus',UserController.traer_status_empresa);
-api.get('/traeragenda',UserController.traer_agenda);
-api.get('/traeridempresa/:id_empresa',UserController.traer_idempresa);
-api.put('/editempresa/:id_empresa',UserController.editarempresa);
-api.put('/editdireccion/:id_direccion',UserController.editardireccion);
-api.put('/editcontacto/:id_contacto',UserController.editarcontacto);
-api.get('/traer_momentos/:id_empresa',UserController.traermomentos);
+api.get('/traerempresa',UserController.traerempresas);//ok
+api.get('/traercolonia',UserController.traercolonia);//ok
+api.get('/traeralcaldia',UserController.traeralcaldia);//ok
+api.get('/traerestado',UserController.traerestado);//ok
+api.get('/traercontacto',UserController.traercontacto_empresa);//p
+api.get('/traerstatus',UserController.traer_status_empresa);//ok
+api.get('/traeragenda',UserController.traer_agenda);//ok
+api.get('/traeridempresa/:id_empresa',UserController.traer_idempresa);//p
+api.put('/editempresa/:id_empresa',UserController.editarempresa);//p
+api.put('/editdireccion/:id_direccion',UserController.editardireccion);//p
+api.put('/editcontacto/:id_contacto',UserController.editarcontacto);//p
+api.get('/traer_momentos/:id_momento',UserController.traermomentos);//ok
 api.post('/metemomentos',UserController.insertar_momento); //ok
-api.get('/traerdireccion/:id_direccion',UserController.verdireccion);
+api.get('/traerdireccion/:id_direccion',UserController.verdireccion);//ok
 api.post('/insertarcolonia',UserController.consultarcolonia); //ok
 api.post('/insertaralcaldia',UserController.consultaralcaldia); //ok
 api.post('/insertarestado',UserController.consultarestado); //ok
-api.post('/insertargrupo',UserController.consultargrupo);
-api.get('/traergrupo',UserController.traer_grupo);
-api.get('/traer_sector',UserController.consul_sector);
-api.get('/traertareas/:id_empresa',UserController.traer_tareas_empresa);
+api.post('/insertargrupo',UserController.consultargrupo);//ok
+api.get('/traergrupo',UserController.traer_grupo);//ok
+api.get('/traer_sector',UserController.consul_sector);//ok
+api.get('/traertareas/:id_empresa',UserController.traer_tareas_empresa);//Ya no esta en la bd 
 //api.put('/trae_tareas/:id_empresa/:id_tareas',UserController.modificar_tareas);
-api.put('/traertareasestado/:id_empresa/:id_tareas',UserController.tarea_activa);
+api.put('/traertareasestado/:id_empresa/:id_tareas',UserController.tarea_activa); //Ya no esta en la bd
 
 //api.post('/');
 
 
 //ruta para subir img
-api.put('/subeImagen/:id_empresa', uploadVideo.single('logo', 'id_empresa'), UserController.subeImg);
+api.put('/subeImagen/:id_usuario', uploadVideo.single('imagen', 'id_usuario'), UserController.subeImg);//ok
 
 //Nuevas funciones creadas
 

@@ -29,6 +29,7 @@ let Role =require('../models/role');
 
 let fs = require('fs');
 let path = require('path');
+const contactoPersona = require('../models/contactopersona');
 
 
 function pruebas(req, res){
@@ -348,9 +349,11 @@ function insertar_momento(req,res){
 	
 }
 function traermomentos(req,res){
-	let idempresa = req.params.id_empresa;
-	CONN('momentos').where('momentos.id_empresa',idempresa)
-	.join('empresa','momentos.id_empresa', '=', 'empresa.id_empresa').select()
+	let idempresa = req.params.id_momento;
+	CONN('vsc_momento').where('vsc_momento.id_momento',idempresa)
+	.join('cih_persona','cih_persona.id_persona', '=', 'vsc_momento.id_persona_usuario')
+	.join('vsc_empresa','vsc_empresa.id_persona', '=', 'cih_persona.id_persona')
+	.select()
 	.then(moment =>{
 		if (!moment){
 			res.status(500).send({ resp: 'error', error: `${error}` });
@@ -368,13 +371,10 @@ function traermomentos(req,res){
 function editarcontacto(req,res){
 
 	let contactoid = req.params.id_contacto;
-	let contacto = new Contactoempresa(
-		
-		req.body.email,
-		req.body.celular
-		
-		
+	let contacto = new contactoPersona(
+		req.body.id_persona
 		);
+		console.log(contacto);
 
 	CONN('contacto_empresa').where('id_contacto',contactoid).update({email:req.body.email,celular:req.body.celular}).then(editarcontacto =>{
 		console.log(editarcontacto);
@@ -437,12 +437,18 @@ function editardireccion(req,res){
 //funcion para ver direccion de archivos viejos
 function verdireccion(req, res){
 	let direccionid = req.params.id_direccion;
+	CONN('cih_direccion_persona').where('id_direccion',direccionid)
+	.join('cih_persona','cih_persona.id_persona','=','cih_direccion_persona.id_persona')
+	.join('cih_colonia','cih_colonia.id_colonia','=','cih_direccion_persona.id_colonia')
+	.join('cih_alcaldia','cih_alcaldia.id_alcaldia','=','cih_direccion_persona.id_alcaldia')
+	.join('cih_estado','cih_estado.id_estado','=','cih_direccion_persona.id_estado')
 
-	CONN('empresa').where('id_direccion',direccionid).join('direccion_empresa','empresa.id_direccion', '=','direccion_empresa.id_direccion')
-
+	/*CONN('empresa').where('id_direccion',direccionid)
+	.join('direccion_empresa','empresa.id_direccion', '=','direccion_empresa.id_direccion')
 	.join('colonia','direccion_empresa.id_colonia', '=','colonia.id_colonia')
 	.join('alcaldia','direccion_empresa.id_alcaldia', '=','alcaldia.id_alcaldia')
 	.join('estado','direccion_empresa.id_estado', '=','estado.id_estado')
+	*/
 	.select().then(registrosviejos =>{
 
 		if (!registrosviejos){
@@ -512,22 +518,23 @@ function traer_idempresa(req,res){
 
 //Metodo para subir la imagen del colaborador
 function subeImg(req,res){
-	let idempresa = req.params.id_empresa;
+	let idempresa = req.params.id_usuario;
 	let foto = req.file.filename;
 	
-	CONN('vsc_empresa').where('id_empresa',idempresa).
-	update('logo',foto)
+	CONN('usuario').where('id_usuario',idempresa).
+	update('imagen',foto)
 	.then(result=>{
 		if (!result) {
 			res.status(500).send({resp:'Error',message:'No se actualizo el contenido'})
 		}else{
-			CONN('empresa').select('logo').where('id_empresa',idempresa)
+			CONN('usuario').select('imagen').where('id_usuario',idempresa)
 			.then(image=>{
 				if (!image) {
 					res.status(500).send({resp:'Error',message:'error al devolver video'})
 				}
 				else{
 					res.status(200).send({image:image[0],message:'Exito al subir foto'});
+					console.log(foto);
 				}
 			}).catch(error=>{
 				res.status(404).send({resp:'Error',error:`${error}`});
@@ -553,7 +560,7 @@ function traer_agenda(req,res){
 
 //funcion para consultar los datos de status_empresa
 function traer_status_empresa(req,res){
-	CONN('status').select().then(status =>{
+	CONN('vsc_status').select().then(status =>{
 		if (!status){
 			res.status(500).send({ resp: 'error', error: `${error}` });
 		}else{
@@ -591,7 +598,9 @@ function traerempresas(req,res){
 	.join('vsc_status','vsc_empresa.id_status','=','vsc_status.id_status')
 	.join('cih_persona','cih_persona.id_persona','=','vsc_empresa.id_persona')
 	.join('cih_direccion_persona','cih_direccion_persona.id_persona','=','cih_persona.id_persona')
-	
+	.join('cih_colonia','cih_colonia.id_colonia','=','cih_direccion_persona.id_colonia')
+	.join('cih_alcaldia','cih_alcaldia.id_alcaldia','=','cih_direccion_persona.id_alcaldia')
+	.join('cih_estado','cih_estado.id_estado','=','cih_direccion_persona.id_estado')
 
 	//cih_persona 
 	//vsc_status
@@ -687,7 +696,7 @@ CONN('vsc_grupo').insert(grupo).then(idgrupo =>{
 }
 //funcion para consultar sector
 function consul_sector(req,res){
-	CONN('sector').select().then(traesectores =>{
+	CONN('vsc_sector').select().then(traesectores =>{
 		console.log(traesectores);
 		if (!traesectores){
 			res.status(500).send({ resp: 'error', error: `${error}` });
@@ -719,7 +728,7 @@ CONN('vsc_sector').insert(sector).then(idsector =>{
 
 //funcion para traer colonia
 function traercolonia(req, res){
-	CONN('colonia').select().then(colonia =>{
+	CONN('cih_colonia').select().then(colonia =>{
 		if (!colonia){
 			res.status(500).send({ resp: 'error', error: `${error}` });
 		}else{
@@ -730,7 +739,7 @@ function traercolonia(req, res){
 }
 //funcion para traer alcaldia
 function traeralcaldia(req, res){
-	CONN('alcaldia').select().then(alcaldia =>{
+	CONN('cih_alcaldia').select().then(alcaldia =>{
 		if (!alcaldia){
 			res.status(500).send({ resp: 'error', error: `${error}` });
 		}else{
@@ -741,7 +750,7 @@ function traeralcaldia(req, res){
 }
 //funcion para traer estado
 function traerestado(req, res){
-	CONN('estado').select().then(estado =>{
+	CONN('cih_estado').select().then(estado =>{
 		if (!estado){
 			res.status(500).send({ resp: 'error', error: `${error}` });
 		}else{
@@ -780,10 +789,10 @@ function consultarestado(req,res){
 function consultargrupo(req,res){
 	let consulgrupo = new Grupoempresa(req.body.grupo)
 
-	CONN('grupo').where('grupo',req.body.grupo).select().then(traergrupo =>{
+	CONN('vsc_grupo').where('grupo',req.body.grupo).select().then(traergrupo =>{
 		console.log(traergrupo);
 		if (traergrupo == ''){
-			CONN('grupo').insert(consulgrupo).then(insertargrupo =>{
+			CONN('vsc_grupo').insert(consulgrupo).then(insertargrupo =>{
 				if (!insertargrupo){
 					res.status(500).send({resp:'error', error: 'no se inserto grupo'});
 				}else{
