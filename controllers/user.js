@@ -495,7 +495,18 @@ function editarempresa(req,res){
 //funcion para consultar el id de la empresa
 function traer_idempresa(req,res){
 	let idempresa = req.params.id_empresa;
-	CONN('empresa').where('id_empresa',idempresa).join('contacto_empresa','empresa.id_contacto','=','contacto_empresa.id_contacto')
+	CONN('vsc_empresa')
+	.where('id_empresas',idempresa)
+	.join('cih_persona','cih_persona.id_persona','=','vsc_empresa.id_persona')
+	.join('vsc_contacto_persona','vsc_contacto_persona.id_persona','=','cih_persona.id_persona')
+	.join('vsc_status','vsc_status.id_status','=','vsc_empresa.id_status')
+	.join('cih_direccion_persona','cih_direccion_persona.id_persona','=','cih_persona.id_persona')
+	.join('cih_colonia','cih_colonia.id_colonia','=','cih_persona.id_persona')
+	.join('cih_alcaldia','cih_alcaldia.id_alcaldia','=','cih_direccion_persona.id_alcaldia')
+	.join('cih_estado','cih_estado.id_estado','=','cih_direccion_persona.id_estado')
+
+	/*
+	.join('contacto_empresa','empresa.id_contacto','=','contacto_empresa.id_contacto')
 	.join('status','empresa.id_status','=','status.id_status')
 
 	.join('direccion_empresa','empresa.id_direccion', '=', 'direccion_empresa.id_direccion')
@@ -503,13 +514,12 @@ function traer_idempresa(req,res){
 	.join('colonia','direccion_empresa.id_colonia', '=','colonia.id_colonia')
 	.join('alcaldia','direccion_empresa.id_alcaldia', '=','alcaldia.id_alcaldia')
 	.join('estado','direccion_empresa.id_estado', '=','estado.id_estado')
-
-	.select().then(empresaid =>{
-		//console.log(empresaid);
-		if (!empresaid){
+	*/
+	.select().then(empresa =>{
+		if (empresa<1){
 			res.status(500).send({resp:'Error',message:'No trajo id'})
 		}else{
-			res.status(200).send({empresaid:empresaid,message:'Exito al traer el id'});
+			res.status(200).send({resp:'Exito al traer el id', empresa:empresa});
 		}
 	}).catch(error =>{
 		res.status(500).send({resp: 'error', error: `${error}` });

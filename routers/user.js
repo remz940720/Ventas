@@ -50,7 +50,7 @@ api.get('/traerestado',UserController.traerestado);//ok
 api.get('/traercontacto',UserController.traercontacto_empresa);//p
 api.get('/traerstatus',UserController.traer_status_empresa);//ok
 api.get('/traeragenda',UserController.traer_agenda);//ok
-api.get('/traeridempresa/:id_empresa',UserController.traer_idempresa);//p
+api.get('/traeridempresa/:id_empresa',UserController.traer_idempresa);//ok
 api.put('/editempresa/:id_empresa',UserController.editarempresa);//p
 api.put('/editdireccion/:id_direccion',UserController.editardireccion);//p
 api.put('/editcontacto/:id_contacto',UserController.editarcontacto);//p
